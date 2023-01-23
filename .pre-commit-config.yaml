@@ -1,6 +1,12 @@
 repos:
   - repo: local
     hooks:
+      - id: black
+        name: black
+        entry: black
+        language: system
+        types: [python]
+        require_serial: true
       - id: check-added-large-files
         name: Check for added large files
         entry: check-added-large-files
@@ -30,38 +36,22 @@ repos:
         name: Check Yaml
         entry: check-yaml
         language: system
-        exclude: "docs/mkdocs.yml"
         types: [yaml]
+      - id: reorder-python-imports
+        name: Reorder python imports
+        entry: reorder-python-imports
+        language: system
+        types: [python]
+      - id: flake8
+        name: flake8
+        entry: flake8
+        language: system
+        types: [python]
+        args: ["--config=.flake8"]
+        require_serial: true
       - id: no-commit-to-branch
         name: Prevent commits to dev / master
         entry: no-commit-to-branch
         language: python
         args: ["-b", dev, "-b", master, "-b", main]
         pass_filenames: false
-      - id: black
-        name: black
-        entry: black
-        language: system
-        types: [python]
-        require_serial: true
-      # - id: flake8
-      #   name: flake8
-      #   entry: flake8
-      #   language: system
-      #   types: [python]
-      #   args: ["--config='{{ cookiecutter.repo_name }}/setup.cfg'"]
-      #   require_serial: true
-  - repo: https://github.com/prettier/pre-commit
-    rev: v2.1.2
-    hooks:
-      - id: prettier
-        name: Prettier (mkdocs markdown)
-        args: ["--tab-width", "4"]
-        files: "^docs/.*md$"
-      - id: prettier
-        name: Prettier (other markdown)
-        exclude: "docs"
-        files: ".md"
-      - id: prettier
-        name: Prettier (except markdown)
-        exclude: ".md"
